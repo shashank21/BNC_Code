@@ -769,6 +769,9 @@ end
 frq = [1, 2, 5, 10, 20, 50, 100];
 figure;
 plot(frq, spikecount)
+xlabel('Frequency (Hz)')
+ylabel('Number of Spikes')
+title('Spike Count vs Frequency')
 
 figure;
 plot(tsinevec1, Vvecsine1, tsinevec1, Uvecsine1)
@@ -901,73 +904,83 @@ I_inject2 = 0.9;
 for i = 2:1500
     
 %Update Equations
-if U_n(i,1) == 0
+if V_n1(i-1) ~= V_spk
     V_n1(i) = V_n1(i-1) + (1/C)*((-V_n1(i-1)/R) - g_n1(i-1)*(V_n1(i-1)-E_syn) + I_inject1); %What is g?  
     theta_n1(i) = theta_n1(i-1) + ((-theta_n1(i-1) + V_n1(i-1))/tau_thresh);
     z_n1(i) = z_n1(i-1) + (-z_n1(i-1)/tau_syn) + ((g_peak*exp(1))/tau_syn)*U_n(i-1,2); 
     g_n1(i) = g_n1(i-1) + (-g_n1(i-1)/tau_syn) + z_n1(i-1);
 end
   
-if U_n(i,2) == 0
+if V_n2(i-1) ~= V_spk
     V_n2(i) = V_n2(i-1) + (1/C)*((-V_n2(i-1)/R) - g_n2(i-1)*(V_n2(i-1)-E_syn) + I_inject2); %What is g? What is I_inject?
     theta_n2(i) = theta_n2(i-1) + ((-theta_n2(i-1) + V_n2(i-1))/tau_thresh);
     z_n2(i) = z_n2(i-1) + (-z_n2(i-1)/tau_syn) + ((g_peak*exp(1))/tau_syn)*U_n(i-1,1); %What is U
     g_n2(i) = g_n2(i-1) + (-g_n2(i-1)/tau_syn) + z_n2(i-1);
+end
+
+%Reset if Spiked
+if V_n1(i-1) == V_spk
+    V_n1(i) = E_inh;
+end
+if V_n2(i-1) == V_spk
+    V_n2(i) = E_inh;
 end
 
 %Compare Thresholds
 if V_n1(i) >= theta_n1(i)
     V_n1(i) = V_spk;
-    U_n(i+1,:) = [1,0];
+    U_n(i,:) = [1,0];
 end
 if V_n2(i) >= theta_n2(i)
     V_n2(i) = V_spk;
-    U_n(i+1,:) = [0,1];
+    U_n(i,:) = [0,1];
 end
 
-%Reset V's if Spike
-if V_n1(i) == V_spk
-    V_n1(i+1) = E_inh;  
 end
 
-if V_n2(i) == V_spk
-    V_n2(i+1) = E_inh;
-end
-
-end   
-
-
+figure;
+plot(V_n1)
+hold on
+plot(V_n2)
+hold off
+xlim([-100, 1600])
+ylim([-20, 80])
+xlabel('Time (ms)')
+ylabel('Voltage (mV)')
+legend('Neuron 1', 'Neuron 2')
+title('Two-Neuron Oscillator')
 
 %Old attempt
 
-for i = 2:1500
+%for i = 2:1500
  
-if V_n1(i-1) == V_spk
-    V_n1(i) = E_inh;
-    U_n(i,:) = [1,0];
-elseif V_n1(i-1) >=  theta_n1(i-1)
-    V_n1(i) = V_spk;
-else
+%if V_n1(i-1) == V_spk
+%    V_n1(i) = E_inh;
+%    U_n(i,:) = [1,0];
+%elseif V_n1(i-1) >=  theta_n1(i-1)
+%    V_n1(i) = V_spk;
+%else
     %Update Equations
-    V_n1(i) = V_n1(i-1) + (1/C)*((-V_n1(i-1)/R) - g_n1(i-1)*(V_n1(i-1)-E_syn) + I_inject1); %What is g?  
-    theta_n1(i) = theta_n1(i-1) + ((-theta_n1(i-1) + V_n1(i-1))/tau_thresh);
-    z_n1(i) = z_n1(i-1) + (-z_n1(i-1)/tau_syn) + ((g_peak*exp(1))/tau_syn)*U_n(i-1,2); 
-    g_n1(i) = g_n1(i-1) + (-g_n1(i-1)/tau_syn) + z_n1(i-1);
-end
+%     V_n1(i) = V_n1(i-1) + (1/C)*((-V_n1(i-1)/R) - g_n1(i-1)*(V_n1(i-1)-E_syn) + I_inject1); %What is g?  
+%     theta_n1(i) = theta_n1(i-1) + ((-theta_n1(i-1) + V_n1(i-1))/tau_thresh);
+%     z_n1(i) = z_n1(i-1) + (-z_n1(i-1)/tau_syn) + ((g_peak*exp(1))/tau_syn)*U_n(i-1,2); 
+%     g_n1(i) = g_n1(i-1) + (-g_n1(i-1)/tau_syn) + z_n1(i-1);
+% end
+% 
+% if V_n2(i-1) == V_spk
+%     V_n2(i) = E_inh;
+%     U_n(i,:) = [0,1];
+% elseif V_n2(i-1) >= theta_n2(i-1)
+%     V_n2(i) = V_spk;
+% else   
+%     %Update Equations   
+%     V_n2(i) = V_n2(i-1) + (1/C)*((-V_n2(i-1)/R) - g_n2(i-1)*(V_n2(i-1)-E_syn) + I_inject2); %What is g? What is I_inject?
+%     theta_n2(i) = theta_n2(i-1) + ((-theta_n2(i-1) + V_n2(i-1))/tau_thresh);
+%     z_n2(i) = z_n2(i-1) + (-z_n2(i-1)/tau_syn) + ((g_peak*exp(1))/tau_syn)*U_n(i-1,1); %What is U
+%     g_n2(i) = g_n2(i-1) + (-g_n2(i-1)/tau_syn) + z_n2(i-1);
+% end
+% end
 
-if V_n2(i-1) == V_spk
-    V_n2(i) = E_inh;
-    U_n(i,:) = [0,1];
-elseif V_n2(i-1) >= theta_n2(i-1)
-    V_n2(i) = V_spk;
-else   
-    %Update Equations   
-    V_n2(i) = V_n2(i-1) + (1/C)*((-V_n2(i-1)/R) - g_n2(i-1)*(V_n2(i-1)-E_syn) + I_inject2); %What is g? What is I_inject?
-    theta_n2(i) = theta_n2(i-1) + ((-theta_n2(i-1) + V_n2(i-1))/tau_thresh);
-    z_n2(i) = z_n2(i-1) + (-z_n2(i-1)/tau_syn) + ((g_peak*exp(1))/tau_syn)*U_n(i-1,1); %What is U
-    g_n2(i) = g_n2(i-1) + (-g_n2(i-1)/tau_syn) + z_n2(i-1);
-end
-end
 
 %% Problem3
 
