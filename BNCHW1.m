@@ -355,7 +355,7 @@ ylabel('Voltage (mV)')
 R = 10; %MOhm
 C = 1; %nF
 V_thr = 5; %mV
-V_spk = 70; %mV
+%V_spk = 70; %mV
 dt = 1; %ms
 
 Vvec = zeros(100,1);
@@ -950,43 +950,12 @@ ylabel('Voltage (mV)')
 legend('Neuron 1', 'Neuron 2')
 title('Two-Neuron Oscillator')
 
-%Old attempt
-
-%for i = 2:1500
- 
-%if V_n1(i-1) == V_spk
-%    V_n1(i) = E_inh;
-%    U_n(i,:) = [1,0];
-%elseif V_n1(i-1) >=  theta_n1(i-1)
-%    V_n1(i) = V_spk;
-%else
-    %Update Equations
-%     V_n1(i) = V_n1(i-1) + (1/C)*((-V_n1(i-1)/R) - g_n1(i-1)*(V_n1(i-1)-E_syn) + I_inject1); %What is g?  
-%     theta_n1(i) = theta_n1(i-1) + ((-theta_n1(i-1) + V_n1(i-1))/tau_thresh);
-%     z_n1(i) = z_n1(i-1) + (-z_n1(i-1)/tau_syn) + ((g_peak*exp(1))/tau_syn)*U_n(i-1,2); 
-%     g_n1(i) = g_n1(i-1) + (-g_n1(i-1)/tau_syn) + z_n1(i-1);
-% end
-% 
-% if V_n2(i-1) == V_spk
-%     V_n2(i) = E_inh;
-%     U_n(i,:) = [0,1];
-% elseif V_n2(i-1) >= theta_n2(i-1)
-%     V_n2(i) = V_spk;
-% else   
-%     %Update Equations   
-%     V_n2(i) = V_n2(i-1) + (1/C)*((-V_n2(i-1)/R) - g_n2(i-1)*(V_n2(i-1)-E_syn) + I_inject2); %What is g? What is I_inject?
-%     theta_n2(i) = theta_n2(i-1) + ((-theta_n2(i-1) + V_n2(i-1))/tau_thresh);
-%     z_n2(i) = z_n2(i-1) + (-z_n2(i-1)/tau_syn) + ((g_peak*exp(1))/tau_syn)*U_n(i-1,1); %What is U
-%     g_n2(i) = g_n2(i-1) + (-g_n2(i-1)/tau_syn) + z_n2(i-1);
-% end
-% end
-
 
 %% Problem3
 
 R_inp = dlmread('spikes.txt');
 S_inp = dlmread('Stimulus.txt');
-S_mat = zeros(180,20);
+S_mat = zeros(181,20);
 
 %Creates a mask from 0-20000ms with each 1 representing stimulus presence
 %in that 100ms bin
@@ -1001,7 +970,7 @@ for i = 1:23
 end
 
 %Creates the stimulus matrix with 2s rows in 100ms bins (so 20 columns)
-for j = 1:180
+for j = 1:181
     S_mat(j,:) = mask_mat(j:j+19);
 end
 
@@ -1009,62 +978,165 @@ end
 
 timeset1 = R_inp<20; %Instead of find(R_inp<20) this creates 0s and 1s, with 1s where R_inp<20
 ts1 = R_inp(timeset1); %Outputs vector with all of the above spike times
-timeset2 = R_inp >= 20 & R_inp<40;
+timeset2 = R_inp>=20 & R_inp<40;
 ts2 = R_inp(timeset2);
-timeset3 = R_inp >= 40 & R_inp<60;
+timeset3 = R_inp>=40 & R_inp<60;
 ts3 = R_inp(timeset3);
-timeset4 = R_inp >= 60 & R_inp<80;
+timeset4 = R_inp>=60 & R_inp<80;
 ts4 = R_inp(timeset4);
-timeset5 = R_inp >= 80 & R_inp<100;
+timeset5 = R_inp>=80 & R_inp<100;
 ts5 = R_inp(timeset5);
 
-%Create actual response vectors with 1s and 0s based on 100ms bins
-
-R_1 = zeros(200,1);
-R_2 = zeros(200,1);
-R_3 = zeros(200,1);
-R_4 = zeros(200,1);
-R_5 = zeros(200,1);
-
-%Create the response vectors (200x1) where a 1 means a spike in that bin
+%In each response vector I need to ignore first 2 seconds and then 
+%bin in 100ms intervals
+R_1 = zeros(181,1);
+R_2 = zeros(181,1);
+R_3 = zeros(181,1);
+R_4 = zeros(181,1);
+R_5 = zeros(181,1);
 for a = 1:length(ts1)
-    temp_val1 = ts1(a);
-    round_down = floor(temp_val1*10);
-    R_1(round_down + 1) = 1;  
+    for b = 1:181
+      if ts1(a) >= 2 + (b-1)*0.1 && ts1(a) < 2 + b*0.1
+          R_1(b) = R_1(b)+1;
+      end
+    end      
 end
 
-for b = 1:length(ts2)
-    temp_val2 = ts2(b);
-    round_down = floor((temp_val2-20)*10);
-    R_2(round_down + 1) = 1;
+for a = 1:length(ts2)
+    for b = 1:181
+      if ts2(a) >= 22 + (b-1)*0.1 && ts2(a) < 22 + b*0.1
+          R_2(b) = R_2(b)+1;
+      end
+    end      
 end
 
-for c = 1:length(ts3)
-    temp_val = ts3(c);
-    round_down = floor((temp_val-40)*10);
-    R_3(round_down + 1) = 1;
+for a = 1:length(ts3)
+    for b = 1:181
+      if ts3(a) >= 42 + (b-1)*0.1 && ts3(a) < 42 + b*0.1
+          R_3(b) = R_3(b)+1;
+      end
+    end      
 end
 
-for d = 1:length(ts4)
-    temp_val = ts4(d);
-    round_down = floor((temp_val-60)*10);
-    R_4(round_down + 1) = 1;
+for a = 1:length(ts4)
+    for b = 1:181
+      if ts4(a) >= 62 + (b-1)*0.1 && ts4(a) < 62 + b*0.1
+          R_4(b) = R_4(b)+1;
+      end
+    end      
 end
 
-for e = 1:length(ts5)
-    temp_val = ts5(e);
-    round_down = floor((temp_val-80)*10);
-    R_5(round_down + 1) = 1;
+for a = 1:length(ts5)
+    for b = 1:181
+      if ts5(a) >= 82 + (b-1)*0.1 && ts5(a) < 82 + b*0.1
+          R_5(b) = R_5(b)+1;
+      end
+    end      
 end
 
+%Linear fit: Calculate matrix S that minimizes (R-SW)^2
+%From wikipedia: "a common use of MP Pseudoinverse is to apply a least
+%squares solution to a system of linear equations"
+
+R_avg = (R_1 + R_2 + R_3 + R_4)/4;
+W = pinv(S_mat)*R_avg;
+
+%Compare fit with R_5
+R_guess = S_mat*W;
+x_graph = linspace(2, 20, 181); 
+figure;
+plot(x_graph, R_guess)
+hold on
+plot(x_graph, R_5)
+hold off
+title('Linear Fit of Spike Response to Stimulus')
+xlabel('Time (s)')
+ylabel('# of spikes')
+legend('Predicted','Trial 5')
+
+%Non-linear fit: paper says to "compare linear filter g(t) to actual 
+%R_avg and average over bins of g(t) containing equal number of points"
+%This currently does not work at all
+plot(sort(R_guess), sort(R_avg))
+xlabel('Predicted R spike count per bin')
+ylabel('Average Spike Count over 4 trials per bin')
+title('Non-Linearity (According to paper, Hz)')
+
+%Sorts and indices my prediction and the average over 4 trials
+[R_guess_ord, R_guess_ind] = sort(R_guess);
+[R_avg_ord, R_avg_ind] = sort(R_avg);
+
+%Averages across bins of 3, as done in paper, in order to simulate the
+%"non
+newvec_1 = zeros(60,1);
+newvec_2 = zeros(60,1);
+for a = 1:60
+   newvec_1(a) = mean(R_avg_ord((a-1)*3+1:a*3));
+   newvec_2(a) = mean(R_guess_ord((a-1)*3+1:a*3));
+end
+newvec_3 = (newvec_1 + newvec_2)./2;
+    
+new_R_guess = zeros(181,1);
+for b = 1:60
+    new_R_guess((b-1)*3+1:b*3) = newvec_3(b);
+end
+new_R_guess(181) = R_guess_ord(181);
+
+
+[~, newsort] = sort(R_guess_ind);
+figure;
+plot(x_graph, new_R_guess(newsort))
+hold on
+plot(x_graph, R_5)
+hold off
+title('LN Fit of Spike Response to Stimulus')
+ylabel('# Of Spikes')
+xlabel('Time (s)')
 
     
+%% Problem 4
+
+%Need to run the end of problem 3 to get predicted firing rate of neuron 
+%as a function of t
+
+lambda_t = new_R_guess(newsort);
+lambda_max = max(lambda_t);
+ratio = lambda_t/lambda_max;
+poisson_spike = zeros(181,1000);
+U = zeros(181,1000);
+
+%Replace this with numeric array later, more effective
+%Creating a bunch of different spike trains
+for j = 1:1000
+    U(:,j) = rand([181, 1]);
+    for i = 1:181
     
-   
+        if U(i,j) <= ratio(i)
+        poisson_spike(i,j) = 1;
+        end
+    
+    end
+end
+
+%Calculating ISI's across ALL spike trains
+
+ISI_value = zeros;
+index_spike = zeros;
+for i = 1:1000
+    index_spike = find(poisson_spike(:,i), 181);
+    for j = 1:length(index_spike)-1
+        ISI_value(i+j-1) = index_spike(j+1) - index_spike(j) + 1;
+    end
+end
 
 
-    
-    
+
+        
+
+
+
+
+
 
 
 
