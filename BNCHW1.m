@@ -1119,16 +1119,27 @@ for j = 1:1000
 end
 
 %Calculating ISI's across ALL spike trains
-
 ISI_value = zeros;
-index_spike = zeros;
+abc = zeros(1001,1);
+index_spike_store = {2};
 for i = 1:1000
     index_spike = find(poisson_spike(:,i), 181);
+    index_spike_store{i} = index_spike;
+    abc(i+1) = abc(i) + length(index_spike)-1;
     for j = 1:length(index_spike)-1
-        ISI_value(i+j-1) = index_spike(j+1) - index_spike(j) + 1;
+        ISI_value(abc(i) + j) = index_spike(j+1) - index_spike(j);
     end
 end
 
+%Calculate Fano Factor
+mean_spike = mean(mean(poisson_spike));
+var_spike = var(reshape(poisson_spike, [1 181000]));
+FF = var_spike/mean_spike;
+
+%Calculate Coefficient of Variation
+mean_isi = mean(ISI_value);
+std_isi = std(ISI_value);
+cov = std_isi/mean_isi;
 
 
         
