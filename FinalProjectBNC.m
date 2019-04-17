@@ -158,7 +158,8 @@ end
 
 %% Correlation Matrix Generation
 
-%Input is a time x ROI matrix
+%Input is a time x ROI matrix, pair corr generates correlation matrix
+
 %Correlation Matrix durin stim
 CorrMat = paircorr(o_1o3o02(2:923,41:56)',o_1o3o02(2:923,41:56)');
 figure;
@@ -168,13 +169,132 @@ imagesc(CorrMat,[-1,1])
 CorrMat_2 = paircorr(o_1o3o02(2:923,1:56)',o_1o3o02(2:923,1:56)');
 imagesc(CorrMat_2,[-1,1])
 
-
 %correlation matrix during prestim
 Corr_mat_prestim = paircorr(o_1o3o02(2:923,1:40)',o_1o3o02(2:923,1:40)');
 imagesc(Corr_mat_prestim, [-1,1])
 
 diff = CorrMat - Corr_mat_prestim;
 
+%Matrices for o_1o3o04
+Corr_stim_o_1o3o04 = paircorr(o_1o3o04(2:923,41:56)',o_1o3o04(2:923,41:56)');
+Corr_prestim_stim_o_1o3o04 = paircorr(o_1o3o04(2:923,1:56)',o_1o3o04(2:923,1:56)');
+Corr_prestim_o_1o3o04 = paircorr(o_1o3o04(2:923,1:40)',o_1o3o04(2:923,1:40)');
+Corr_diff_o_1o3o04 = Corr_stim_o_1o3o04 - Corr_prestim_o_1o3o04;
+
+%Matrices for o_Acet02
+Corr_stim_o_Acet02 = paircorr(o_Acet02(2:923,41:56)',o_Acet02(2:923,41:56)');
+Corr_prestim_stim_o_Acet02 = paircorr(o_Acet02(2:923,1:56)',o_Acet02(2:923,1:56)');
+Corr_prestim_o_Acet02 = paircorr(o_Acet02(2:923,1:40)',o_Acet02(2:923,1:40)');
+Corr_diff_o_Acet02 = Corr_stim_o_Acet02 - Corr_prestim_o_Acet02;
+
+%Matrices for o_Acet04
+Corr_stim_o_Acet04 = paircorr(o_Acet04(2:923,41:56)',o_Acet04(2:923,41:56)');
+Corr_prestim_stim_o_Acet04 = paircorr(o_Acet04(2:923,1:56)',o_Acet04(2:923,1:56)');
+Corr_prestim_o_Acet04 = paircorr(o_Acet04(2:923,1:40)',o_Acet04(2:923,1:40)');
+Corr_diff_o_Acet04 = Corr_stim_o_Acet04 - Corr_prestim_o_Acet04;
+
+%Matrices for o_Bzald02
+Corr_stim_o_Bzald02 = paircorr(o_Bzald02(2:923,41:56)',o_Bzald02(2:923,41:56)');
+Corr_prestim_stim_o_Bzald02 = paircorr(o_Bzald02(2:923,1:56)',o_Bzald02(2:923,1:56)');
+Corr_prestim_o_Bzald02 = paircorr(o_Bzald02(2:923,1:40)',o_Bzald02(2:923,1:40)');
+Corr_diff_o_Bzald02 = Corr_stim_o_Bzald02 - Corr_prestim_o_Bzald02;
+
+%Matrices for o_Bzald04
+Corr_stim_o_Bzald04 = paircorr(o_Bzald04(2:923,41:56)',o_Bzald04(2:923,41:56)');
+Corr_prestim_stim_o_Bzald04 = paircorr(o_Bzald04(2:923,1:56)',o_Bzald04(2:923,1:56)');
+Corr_prestim_o_Bzald04 = paircorr(o_Bzald04(2:923,1:40)',o_Bzald04(2:923,1:40)');
+Corr_diff_o_Bzald04 = Corr_stim_o_Bzald04 - Corr_prestim_o_Bzald04;
+
+%Matrices for o_EA02
+Corr_stim_o_EA02 = paircorr(o_EA02(2:923,41:56)',o_EA02(2:923,41:56)');
+Corr_prestim_stim_o_EA02 = paircorr(o_EA02(2:923,1:56)',o_EA02(2:923,1:56)');
+Corr_prestim_o_EA02 = paircorr(o_EA02(2:923,1:40)',o_EA02(2:923,1:40)');
+Corr_diff_o_EA02 = Corr_stim_o_EA02 - Corr_prestim_o_EA02;
+
+%Matrices for o_EA04
+Corr_stim_o_EA04 = paircorr(o_EA04(2:923,41:56)',o_EA04(2:923,41:56)');
+Corr_prestim_stim_o_EA04 = paircorr(o_EA04(2:923,1:56)',o_EA04(2:923,1:56)');
+Corr_prestim_o_EA04 = paircorr(o_EA04(2:923,1:40)',o_EA04(2:923,1:40)');
+Corr_diff_o_EA04 = Corr_stim_o_EA04 - Corr_prestim_o_EA04;
+
+%Matrices for o_EB02
+Corr_stim_o_EB02 = paircorr(o_EB02(2:923,41:56)',o_EB02(2:923,41:56)');
+Corr_prestim_stim_o_EB02 = paircorr(o_EB02(2:923,1:56)',o_EB02(2:923,1:56)');
+Corr_prestim_o_EB02 = paircorr(o_EB02(2:923,1:40)',o_EB02(2:923,1:40)');
+Corr_diff_o_EB02 = Corr_stim_o_EB02 - Corr_prestim_o_EB02;
+
+%Matrices for o_EB04
+Corr_stim_o_EB04 = paircorr(o_EB04(2:923,41:56)',o_EB04(2:923,41:56)');
+Corr_prestim_stim_o_EB04 = paircorr(o_EB04(2:923,1:56)',o_EB04(2:923,1:56)');
+Corr_prestim_o_EB04 = paircorr(o_EB04(2:923,1:40)',o_EB04(2:923,1:40)');
+Corr_diff_o_EB04 = Corr_stim_o_EB04 - Corr_prestim_o_EB04;
+
+%Matrices for o_MH02
+Corr_stim_o_MH02 = paircorr(o_MH02(2:923,41:56)',o_MH02(2:923,41:56)');
+Corr_prestim_stim_o_MH02 = paircorr(o_MH02(2:923,1:56)',o_MH02(2:923,1:56)');
+Corr_prestim_o_MH02 = paircorr(o_MH02(2:923,1:40)',o_MH02(2:923,1:40)');
+Corr_diff_o_MH02 = Corr_stim_o_MH02 - Corr_prestim_o_MH02;
+
+%Matrices for o_MH04
+Corr_stim_o_MH04 = paircorr(o_MH04(2:923,41:56)',o_MH04(2:923,41:56)');
+Corr_prestim_stim_o_MH04 = paircorr(o_MH04(2:923,1:56)',o_MH04(2:923,1:56)');
+Corr_prestim_o_MH04 = paircorr(o_MH04(2:923,1:40)',o_MH04(2:923,1:40)');
+Corr_diff_o_MH04 = Corr_stim_o_MH04 - Corr_prestim_o_MH04;
+
+%Matrices for o_PO
+Corr_stim_o_PO = paircorr(o_PO(2:923,41:56)',o_PO(2:923,41:56)');
+Corr_prestim_stim_o_PO = paircorr(o_PO(2:923,1:56)',o_PO(2:923,1:56)');
+Corr_prestim_o_PO = paircorr(o_PO(2:923,1:40)',o_PO(2:923,1:40)');
+Corr_diff_o_PO = Corr_stim_o_PO - Corr_prestim_o_PO;
+
+%Plot all stim corrmats
+figure;
+imagesc(Corr_stim_o_1o3o04,[-1,1])
+colorbar
+
+figure;
+imagesc(Corr_stim_o_Acet02,[-1,1])
+colorbar
+
+figure;
+imagesc(Corr_stim_o_Acet04,[-1,1])
+colorbar
+
+figure;
+imagesc(Corr_stim_o_Bzald02,[-1,1])
+colorbar
+
+figure;
+imagesc(Corr_stim_o_Bzald04,[-1,1])
+colorbar
+
+figure;
+imagesc(Corr_stim_o_EA02,[-1,1])
+colorbar
+
+figure;
+imagesc(Corr_stim_o_EA04,[-1,1])
+colorbar
+
+figure;
+imagesc(Corr_stim_o_EB02,[-1,1])
+colorbar
+
+figure;
+imagesc(Corr_stim_o_EB04,[-1,1])
+colorbar
+
+figure;
+imagesc(Corr_stim_o_MH02,[-1,1])
+colorbar
+
+figure;
+imagesc(Corr_stim_o_MH04,[-1,1])
+colorbar
+
+figure;
+imagesc(Corr_stim_o_PO, [-1,1])
+colorbar
 
 
 
